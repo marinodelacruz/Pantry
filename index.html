@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pantry">
+  <meta name="theme-color" content="#FAF8F5">
+  <meta name="description" content="A beautifully crafted grocery list for families">
+  <title>Pantry</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjQwIiBmaWxsPSIjRkFGOEY1Ii8+PHRleHQgeD0iOTAiIHk9IjExNSIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjEwMCIgZmlsbD0iI0M0NUQzRSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UDwvdGV4dD48L3N2Zz4=">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjQwIiBmaWxsPSIjRkFGOEY1Ii8+PHRleHQgeD0iOTAiIHk9IjExNSIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjEwMCIgZmlsbD0iI0M0NUQzRSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UDwvdGV4dD48L3N2Zz4=">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #FAF8F5;
+      --surface: #FFFFFF;
+      --elevated: #F5F2EF;
+      --divider: rgba(45, 41, 38, 0.08);
+      --text-primary: #2D2926;
+      --text-secondary: #7A756F;
+      --muted: #A8A29E;
+      --accent: #C45D3E;
+      --accent-soft: rgba(196, 93, 62, 0.12);
+      --success: #4A9B6E;
+      --success-soft: rgba(74, 155, 110, 0.15);
+      --destructive: #C94D4D;
+      --destructive-soft: rgba(201, 77, 77, 0.12);
+      --focus-ring: rgba(196, 93, 62, 0.3);
+      --header-bg: rgba(250, 248, 245, 0.92);
+      --shadow-sm: 0 1px 2px rgba(45, 41, 38, 0.04);
+      --shadow-md: 0 4px 12px rgba(45, 41, 38, 0.08);
+      --shadow-lg: 0 8px 30px rgba(45, 41, 38, 0.12);
+      --noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+      
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      
+      --header-height: 130px;
+      --quick-add-height: 72px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1C1917;
+      --surface: #292524;
+      --elevated: #3D3836;
+      --divider: rgba(255, 255, 255, 0.08);
+      --text-primary: #FAF8F5;
+      --text-secondary: #A8A29E;
+      --muted: #78716C;
+      --accent: #E07A5F;
+      --accent-soft: rgba(224, 122, 95, 0.15);
+      --success: #6EBD8E;
+      --success-soft: rgba(110, 189, 142, 0.18);
+      --destructive: #E57373;
+      --destructive-soft: rgba(229, 115, 115, 0.15);
+      --focus-ring: rgba(224, 122, 95, 0.35);
+      --header-bg: rgba(28, 25, 23, 0.92);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    html {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-optical-sizing: auto;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+      position: fixed;
+      width: 100%;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--noise);
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    [data-theme="dark"] body::before {
+      opacity: 0.015;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      padding: calc(var(--safe-top) + 16px) 20px 16px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .header-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+
+    .sync-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 0 0 var(--success-soft);
+    }
+
+    .sync-status.synced { 
+      background: var(--success);
+      box-shadow: 0 0 0 4px var(--success-soft);
+    }
+    .sync-status.syncing { 
+      background: var(--accent);
+      animation: pulse-sync 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .sync-status.offline { 
+      background: var(--destructive);
+    }
+
+    @keyframes pulse-sync {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.1); }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--elevated);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-btn:active {
+      transform: scale(0.94);
+      background: var(--divider);
+    }
+
+    .progress-section {
+      margin-bottom: 16px;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .progress-count {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--elevated);
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success) 0%, #6EBD8E 100%);
+      border-radius: 3px;
+      transition: width 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 0;
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .segments {
+      display: flex;
+      background: var(--elevated);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .segment {
+      flex: 1;
+      height: 38px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: color 250ms ease;
+      border-radius: 7px;
+    }
+
+    .segment.active {
+      color: var(--text-primary);
+    }
+
+    .segment-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      background: var(--surface);
+      border-radius: 7px;
+      transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-md);
+      z-index: 1;
+    }
+
+    .search-wrapper {
+      margin-top: 14px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 42px;
+      background: var(--elevated);
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: 0 40px 0 42px;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 200ms ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 150ms ease;
+    }
+
+    .search-clear.visible {
+      display: flex;
+    }
+
+    .search-clear:active {
+      background: var(--divider);
+    }
+
+    .main {
+      position: fixed;
+      top: calc(var(--header-height) + 95px);
+      left: 0;
+      right: 0;
+      bottom: calc(var(--quick-add-height) + var(--safe-bottom));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px 20px 20px;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .empty-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+      filter: grayscale(30%);
+    }
+
+    .empty-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .empty-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 240px;
+      line-height: 1.5;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      min-height: 62px;
+      padding: 12px 14px;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--divider);
+      animation: itemIn 350ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    @keyframes itemIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .item.checked {
+      background: var(--elevated);
+      border-color: transparent;
+    }
+
+    .item.highlight {
+      animation: highlight 800ms ease;
+    }
+
+    @keyframes highlight {
+      0%, 100% { box-shadow: var(--shadow-sm), 0 0 0 0 var(--accent-soft); }
+      50% { box-shadow: var(--shadow-sm), 0 0 0 6px var(--accent-soft); }
+    }
+
+    .item.shake {
+      animation: shake 400ms ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .item.removing {
+      animation: itemOut 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes itemOut {
+      to {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.95);
+        height: 0;
+        min-height: 0;
+        padding: 0;
+        margin: -5px 0;
+        border-width: 0;
+      }
+    }
+
+    .checkbox-area {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin: -6px;
+    }
+
+    .checkbox {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 2px solid var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      background: transparent;
+    }
+
+    .checkbox svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+      transform: scale(0.5) rotate(-10deg);
+      transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      stroke: white;
+      stroke-width: 3;
+    }
+
+    .item.checked .checkbox {
+      background: var(--success);
+      border-color: var(--success);
+      transform: scale(1);
+    }
+
+    .item.checked .checkbox svg {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    .item-name {
+      flex: 1;
+      font-size: 17px;
+      font-weight: 450;
+      color: var(--text-primary);
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: all 250ms ease;
+      cursor: pointer;
+      line-height: 1.35;
+    }
+
+    .item.checked .item-name {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--muted);
+      opacity: 0.55;
+      color: var(--text-secondary);
+    }
+
+    .delete-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: all 200ms ease;
+      flex-shrink: 0;
+      margin: -6px -4px -6px 0;
+    }
+
+    .delete-btn:active {
+      background: var(--destructive-soft);
+      color: var(--destructive);
+    }
+
+    .delete-btn.confirm {
+      background: var(--destructive);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      width: auto;
+      padding: 0 14px;
+      border-radius: 8px;
+    }
+
+    .quick-add {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--header-bg);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid var(--divider);
+      padding: 14px 20px;
+      padding-bottom: calc(14px + var(--safe-bottom));
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .add-input {
+      width: 100%;
+      height: 48px;
+      background: var(--surface);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-md);
+      padding: 0 48px 0 18px;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 200ms ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .add-input::placeholder {
+      color: var(--muted);
+    }
+
+    .add-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+    .clear-input {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--elevated);
+      border-radius: 50%;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 150ms ease;
+    }
+
+    .clear-input.visible {
+      display: flex;
+    }
+
+    .add-btn {
+      height: 48px;
+      padding: 0 24px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      box-shadow: var(--shadow-md);
+    }
+
+    .add-btn:disabled {
+      background: var(--elevated);
+      color: var(--muted);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .add-btn:not(:disabled):active {
+      transform: scale(0.96);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: calc(var(--quick-add-height) + var(--safe-bottom) + 20px);
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--surface);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 200;
+      max-width: calc(100% - 40px);
+    }
+
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .toast-action {
+      border: none;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 150ms ease;
+    }
+
+    .toast-action:active {
+      transform: scale(0.96);
+    }
+
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 250ms ease;
+      z-index: 300;
+    }
+
+    .sheet-backdrop.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      padding: 12px 20px;
+      padding-bottom: calc(20px + var(--safe-bottom));
+      transform: translateY(100%);
+      transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 301;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .sheet-backdrop.visible .sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 5px;
+      background: var(--muted);
+      opacity: 0.4;
+      border-radius: 3px;
+      margin: 4px auto 20px;
+    }
+
+    .sheet-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 12px 4px 8px;
+    }
+
+    .sheet-option {
+      width: 100%;
+      height: 54px;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 17px;
+      font-weight: 450;
+      text-align: left;
+      padding: 0 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-radius: var(--radius-sm);
+      transition: background 150ms ease;
+    }
+
+    .sheet-option:active {
+      background: var(--elevated);
+    }
+
+    .sheet-option.destructive {
+      color: var(--destructive);
+    }
+
+    .sheet-option-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--elevated);
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .sheet-option.destructive .sheet-option-icon {
+      background: var(--destructive-soft);
+    }
+
+    .sheet-divider {
+      height: 1px;
+      background: var(--divider);
+      margin: 8px 0;
+    }
+
+    .sheet-info {
+      background: var(--elevated);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin: 8px 0;
+    }
+
+    .sheet-info-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .sheet-info-value {
+      font-size: 20px;
+      font-family: 'DM Mono', monospace, 'DM Sans';
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+    }
+
+    .sheet-tip {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      padding: 16px 0 8px;
+      line-height: 1.5;
+    }
+
+    .sheet-cancel {
+      width: 100%;
+      height: 54px;
+      border: none;
+      background: var(--elevated);
+      color: var(--text-secondary);
+      font-size: 17px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 150ms ease;
+    }
+
+    .sheet-cancel:active {
+      background: var(--divider);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 250ms ease;
+      z-index: 400;
+    }
+
+    .modal-backdrop.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 320px;
+      overflow: hidden;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-backdrop.visible .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-content {
+      padding: 28px 24px 24px;
+      text-align: center;
+    }
+
+    .modal-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .modal-message {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .modal-input {
+      width: 100%;
+      height: 48px;
+      background: var(--elevated);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-sm);
+      padding: 0 16px;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-top: 16px;
+      text-align: center;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .modal-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      border-top: 1px solid var(--divider);
+    }
+
+    .modal-btn {
+      flex: 1;
+      height: 52px;
+      border: none;
+      background: transparent;
+      font-size: 17px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+
+    .modal-btn:active {
+      background: var(--elevated);
+    }
+
+    .modal-btn:first-child {
+      color: var(--text-secondary);
+      border-right: 1px solid var(--divider);
+    }
+
+    .modal-btn.destructive {
+      color: var(--destructive);
+      font-weight: 600;
+    }
+
+    .modal-btn.primary {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-top">
+      <div class="header-title-row">
+        <h1 class="header-title">Pantry</h1>
+        <div class="sync-status" id="syncStatus" title="Sync status"></div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">
+          <span id="themeIcon">&#x2600;&#xFE0E;</span>
+        </button>
+        <button class="icon-btn" id="menuBtn" aria-label="Menu">
+          <span>•••</span>
+        </button>
+      </div>
+    </div>
+    
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Progress</span>
+        <span class="progress-count" id="progressText">0 of 0</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+    
+    <div class="segments" id="segments">
+      <div class="segment-indicator" id="segmentIndicator"></div>
+      <button class="segment active" data-filter="toBuy">To Buy</button>
+      <button class="segment" data-filter="all">All</button>
+      <button class="segment" data-filter="checked">Done</button>
+    </div>
+
+    <div class="search-wrapper">
+      <span class="search-icon">&#x1F50D;&#xFE0E;</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search items...">
+      <button class="search-clear" id="searchClear">&#x2715;</button>
+    </div>
+  </header>
+
+  <main class="main" id="main">
+    <div class="list" id="list"></div>
+  </main>
+
+  <div class="quick-add">
+    <div class="input-wrapper">
+      <input type="text" class="add-input" id="addInput" placeholder="Add to list..." autocomplete="off">
+      <button class="clear-input" id="clearInput">&#x2715;</button>
+    </div>
+    <button class="add-btn" id="addBtn" disabled>Add</button>
+  </div>
+
+  <div class="toast" id="toast">
+    <span class="toast-text" id="toastText"></span>
+    <button class="toast-action" id="toastAction" style="display: none">Undo</button>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop">
+    <div class="sheet" id="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">Shared List</div>
+      <div class="sheet-info">
+        <div class="sheet-info-label">Your list code</div>
+        <div class="sheet-info-value" id="listCodeDisplay">------</div>
+      </div>
+      <button class="sheet-option" id="copyCodeBtn">
+        <span class="sheet-option-icon">&#x1F4CB;&#xFE0E;</span>
+        Copy code to share
+      </button>
+      <button class="sheet-option" id="changeListBtn">
+        <span class="sheet-option-icon">&#x1F517;&#xFE0E;</span>
+        Join another list
+      </button>
+      <button class="sheet-option" id="newListBtn">
+        <span class="sheet-option-icon">&#x2795;&#xFE0E;</span>
+        Create new list
+      </button>
+      <div class="sheet-divider"></div>
+      <div class="sheet-title">Actions</div>
+      <button class="sheet-option" id="clearCheckedBtn">
+        <span class="sheet-option-icon">&#x2713;&#xFE0E;</span>
+        Clear completed
+      </button>
+      <button class="sheet-option destructive" id="resetListBtn">
+        <span class="sheet-option-icon">&#x1F5D1;&#xFE0E;</span>
+        Delete all items
+      </button>
+      <div class="sheet-divider"></div>
+      <button class="sheet-option" id="exportBtn">
+        <span class="sheet-option-icon">&#x2B07;&#xFE0E;</span>
+        Export as JSON
+      </button>
+      <button class="sheet-option" id="importBtn">
+        <span class="sheet-option-icon">&#x2B06;&#xFE0E;</span>
+        Import from JSON
+      </button>
+      <div class="sheet-tip">Add to Home Screen for the best experience</div>
+      <button class="sheet-cancel" id="sheetCancel">Done</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <div class="modal-content">
+        <div class="modal-title" id="modalTitle">Reset List?</div>
+        <div class="modal-message" id="modalMessage">This will permanently delete all items.</div>
+        <input type="text" class="modal-input" id="modalInput" style="display: none" placeholder="ABC123">
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn" id="modalCancel">Cancel</button>
+        <button class="modal-btn destructive" id="modalConfirm">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept=".json" style="display: none">
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+  
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFip2WswjwJ-5GoQCC1mewyqN5hc3m1ow",
+      authDomain: "pantry-grocery.firebaseapp.com",
+      databaseURL: "https://pantry-grocery-default-rtdb.firebaseio.com",
+      projectId: "pantry-grocery",
+      storageBucket: "pantry-grocery.firebasestorage.app",
+      messagingSenderId: "1087393916252",
+      appId: "1:1087393916252:web:c322d276d800356efb0d99"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const UI_STORAGE_KEY = 'pantry_ui';
+    let listCode = localStorage.getItem('pantry_list_code') || generateListCode();
+    localStorage.setItem('pantry_list_code', listCode);
+
+    let state = { items: [], ui: { filter: 'toBuy', search: '' } };
+    let deleteConfirmTimeout = null;
+    let toastTimeout = null;
+    let lastDeletedItem = null;
+    let dbRef = null;
+    let isOnline = navigator.onLine;
+
+    function generateListCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    function generateId() {
+      return crypto.randomUUID ? crypto.randomUUID() : 
+        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = Math.random() * 16 | 0;
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
+    function haptic() {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(10); } catch (e) {}
+      }
+    }
+
+    function saveUIState() {
+      try {
+        localStorage.setItem(UI_STORAGE_KEY, JSON.stringify(state.ui));
+      } catch (e) {}
+    }
+
+    function loadUIState() {
+      try {
+        const saved = localStorage.getItem(UI_STORAGE_KEY);
+        if (saved) {
+          state.ui = { ...state.ui, ...JSON.parse(saved) };
+        }
+      } catch (e) {}
+    }
+
+    function setSyncStatus(status) {
+      const el = document.getElementById('syncStatus');
+      el.className = 'sync-status ' + status;
+    }
+
+    function connectToFirebase() {
+      if (dbRef) dbRef.off();
+      
+      dbRef = db.ref('lists/' + listCode + '/items');
+      setSyncStatus('syncing');
+
+      dbRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        state.items = data ? Object.values(data) : [];
+        render();
+        setSyncStatus('synced');
+      }, () => setSyncStatus('offline'));
+
+      document.getElementById('listCodeDisplay').textContent = listCode;
+    }
+
+    function saveItemToFirebase(item) {
+      setSyncStatus('syncing');
+      db.ref('lists/' + listCode + '/items/' + item.id).set(item)
+        .then(() => setSyncStatus('synced'))
+        .catch(() => setSyncStatus('offline'));
+    }
+
+    function deleteItemFromFirebase(id) {
+      setSyncStatus('syncing');
+      db.ref('lists/' + listCode + '/items/' + id).remove()
+        .then(() => setSyncStatus('synced'))
+        .catch(() => setSyncStatus('offline'));
+    }
+
+    function clearAllItemsFromFirebase() {
+      setSyncStatus('syncing');
+      db.ref('lists/' + listCode + '/items').remove()
+        .then(() => setSyncStatus('synced'))
+        .catch(() => setSyncStatus('offline'));
+    }
+
+    function clearCheckedFromFirebase() {
+      setSyncStatus('syncing');
+      const updates = {};
+      state.items.filter(i => i.checked).forEach(item => updates[item.id] = null);
+      db.ref('lists/' + listCode + '/items').update(updates)
+        .then(() => setSyncStatus('synced'))
+        .catch(() => setSyncStatus('offline'));
+    }
+
+    const list = document.getElementById('list');
+    const addInput = document.getElementById('addInput');
+    const addBtn = document.getElementById('addBtn');
+    const clearInputBtn = document.getElementById('clearInput');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const segments = document.getElementById('segments');
+    const segmentIndicator = document.getElementById('segmentIndicator');
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+    const menuBtn = document.getElementById('menuBtn');
+    const sheetBackdrop = document.getElementById('sheetBackdrop');
+    const sheetCancel = document.getElementById('sheetCancel');
+    const clearCheckedBtn = document.getElementById('clearCheckedBtn');
+    const resetListBtn = document.getElementById('resetListBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const importBtn = document.getElementById('importBtn');
+    const fileInput = document.getElementById('fileInput');
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalCancel = document.getElementById('modalCancel');
+    const modalConfirm = document.getElementById('modalConfirm');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalInput = document.getElementById('modalInput');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    const toastAction = document.getElementById('toastAction');
+    const themeBtn = document.getElementById('themeBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const copyCodeBtn = document.getElementById('copyCodeBtn');
+    const changeListBtn = document.getElementById('changeListBtn');
+    const newListBtn = document.getElementById('newListBtn');
+
+    function getFilteredItems() {
+      let items = state.items;
+      if (state.ui.filter === 'toBuy') items = items.filter(i => !i.checked);
+      else if (state.ui.filter === 'checked') items = items.filter(i => i.checked);
+      if (state.ui.search.trim()) {
+        const q = state.ui.search.toLowerCase().trim();
+        items = items.filter(i => i.name.toLowerCase().includes(q));
+      }
+      return items;
+    }
+
+    function renderList() {
+      const filtered = getFilteredItems();
+      
+      if (filtered.length === 0) {
+        const msgs = {
+          toBuy: { icon: '&#x1F6D2;', title: 'All done!', subtitle: 'Your shopping list is empty. Add items below to get started.' },
+          all: { icon: '&#x1F4DD;', title: 'Empty list', subtitle: 'Start adding items to your grocery list.' },
+          checked: { icon: '&#x2713;', title: 'Nothing yet', subtitle: 'Items you check off will appear here.' }
+        };
+        const msg = state.ui.search.trim() 
+          ? { icon: '&#x1F50D;', title: 'No matches', subtitle: 'Try a different search term.' }
+          : msgs[state.ui.filter];
+        
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">${msg.icon}</div>
+            <div class="empty-title">${msg.title}</div>
+            <div class="empty-subtitle">${msg.subtitle}</div>
+          </div>
+        `;
+        return;
+      }
+
+      const sorted = [...filtered].sort((a, b) => {
+        if (a.checked !== b.checked) return a.checked ? 1 : -1;
+        return a.checked ? b.updatedAt - a.updatedAt : a.createdAt - b.createdAt;
+      });
+
+      list.innerHTML = sorted.map((item, i) => `
+        <div class="item ${item.checked ? 'checked' : ''}" data-id="${item.id}" style="animation-delay: ${i * 40}ms">
+          <div class="checkbox-area" data-action="toggle">
+            <div class="checkbox">
+              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <span class="item-name" data-action="toggle">${escapeHtml(item.name)}</span>
+          <button class="delete-btn" data-action="delete" aria-label="Delete">&#x1F5D1;&#xFE0E;</button>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function updateProgress() {
+      const total = state.items.length;
+      const checked = state.items.filter(i => i.checked).length;
+      progressText.textContent = `${checked} of ${total}`;
+      progressFill.style.width = total === 0 ? '0%' : `${(checked / total) * 100}%`;
+    }
+
+    function updateSegmentIndicator() {
+      const btns = segments.querySelectorAll('.segment');
+      const activeBtn = segments.querySelector(`.segment[data-filter="${state.ui.filter}"]`);
+      btns.forEach(b => b.classList.toggle('active', b === activeBtn));
+      if (activeBtn) {
+        const idx = Array.from(btns).indexOf(activeBtn);
+        const w = 100 / btns.length;
+        segmentIndicator.style.width = `calc(${w}% - 8px)`;
+        segmentIndicator.style.transform = `translateX(calc(${idx * 100}% + 4px))`;
+      }
+    }
+
+    function render() {
+      renderList();
+      updateProgress();
+      updateSegmentIndicator();
+    }
+
+    function addItem(name) {
+      const trimmed = name.trim();
+      if (!trimmed) { shakeInput(); return false; }
+      const existing = state.items.find(i => i.name.toLowerCase() === trimmed.toLowerCase());
+      if (existing) { highlightItem(existing.id); return false; }
+      const now = Date.now();
+      saveItemToFirebase({ id: generateId(), name: trimmed, checked: false, createdAt: now, updatedAt: now });
+      haptic();
+      if (state.ui.filter === 'checked') { state.ui.filter = 'toBuy'; saveUIState(); render(); }
+      return true;
+    }
+
+    function toggleItem(id) {
+      const item = state.items.find(i => i.id === id);
+      if (item) {
+        saveItemToFirebase({ ...item, checked: !item.checked, updatedAt: Date.now() });
+        haptic();
+      }
+    }
+
+    function deleteItem(id) {
+      const item = state.items.find(i => i.id === id);
+      if (item) {
+        lastDeletedItem = { ...item };
+        deleteItemFromFirebase(id);
+        haptic();
+        showToast('Item deleted', true);
+      }
+    }
+
+    function undoDelete() {
+      if (lastDeletedItem) {
+        saveItemToFirebase(lastDeletedItem);
+        lastDeletedItem = null;
+        hideToast();
+      }
+    }
+
+    function clearChecked() {
+      const count = state.items.filter(i => i.checked).length;
+      if (count === 0) { showToast('Nothing to clear'); return; }
+      clearCheckedFromFirebase();
+      closeSheet();
+      showToast(`Cleared ${count} item${count > 1 ? 's' : ''}`);
+    }
+
+    function resetList() {
+      clearAllItemsFromFirebase();
+      closeModal();
+      closeSheet();
+      showToast('List cleared');
+    }
+
+    function shakeInput() {
+      addInput.parentElement.parentElement.classList.add('shake');
+      setTimeout(() => addInput.parentElement.parentElement.classList.remove('shake'), 400);
+    }
+
+    function highlightItem(id) {
+      const item = state.items.find(i => i.id === id);
+      if (item) {
+        if (state.ui.filter === 'toBuy' && item.checked) state.ui.filter = 'all';
+        else if (state.ui.filter === 'checked' && !item.checked) state.ui.filter = 'all';
+        saveUIState();
+        render();
+        setTimeout(() => {
+          const el = document.querySelector(`.item[data-id="${id}"]`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.classList.add('highlight');
+            setTimeout(() => el.classList.remove('highlight'), 800);
+          }
+        }, 50);
+      }
+      showToast('Already in your list');
+    }
+
+    function showToast(message, showUndo = false) {
+      clearTimeout(toastTimeout);
+      toastText.textContent = message;
+      toastAction.style.display = showUndo ? 'block' : 'none';
+      toast.classList.add('visible');
+      toastTimeout = setTimeout(hideToast, showUndo ? 4000 : 2500);
+    }
+
+    function hideToast() {
+      toast.classList.remove('visible');
+      lastDeletedItem = null;
+    }
+
+    function openSheet() { sheetBackdrop.classList.add('visible'); }
+    function closeSheet() { sheetBackdrop.classList.remove('visible'); }
+
+    function openModal(title, message, onConfirm, showInput = false, placeholder = '', confirmText = 'Confirm', isDestructive = true) {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modalInput.style.display = showInput ? 'block' : 'none';
+      modalInput.placeholder = placeholder;
+      modalInput.value = '';
+      modalConfirm.textContent = confirmText;
+      modalConfirm.className = 'modal-btn ' + (isDestructive ? 'destructive' : 'primary');
+      modalConfirm.onclick = onConfirm;
+      modalBackdrop.classList.add('visible');
+      if (showInput) setTimeout(() => modalInput.focus(), 100);
+    }
+
+    function closeModal() { modalBackdrop.classList.remove('visible'); }
+
+    function exportList() {
+      const blob = new Blob([JSON.stringify(state.items, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `pantry-${listCode}-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      closeSheet();
+      showToast('Exported!');
+    }
+
+    function importList() { fileInput.click(); }
+
+    function handleImport(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (Array.isArray(imported)) {
+            const newItems = imported.filter(imp => 
+              imp.name && !state.items.some(i => i.name.toLowerCase() === imp.name.toLowerCase())
+            ).map(imp => ({
+              id: generateId(), name: imp.name, checked: Boolean(imp.checked),
+              createdAt: imp.createdAt || Date.now(), updatedAt: imp.updatedAt || Date.now()
+            }));
+            newItems.forEach(item => saveItemToFirebase(item));
+            closeSheet();
+            showToast(`Added ${newItems.length} item${newItems.length !== 1 ? 's' : ''}`);
+          } else showToast('Invalid file');
+        } catch { showToast('Could not parse file'); }
+        fileInput.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function copyListCode() {
+      navigator.clipboard.writeText(listCode).then(() => showToast('Code copied!')).catch(() => showToast('Could not copy'));
+      closeSheet();
+    }
+
+    function joinDifferentList() {
+      closeSheet();
+      openModal('Join a List', 'Enter the 6-character code shared with you:', () => {
+        const newCode = modalInput.value.trim().toUpperCase();
+        if (newCode && newCode.length >= 4) {
+          listCode = newCode;
+          localStorage.setItem('pantry_list_code', listCode);
+          connectToFirebase();
+          closeModal();
+          showToast('Joined ' + listCode);
+        } else showToast('Invalid code');
+      }, true, 'ABC123', 'Join', false);
+    }
+
+    function createNewList() {
+      closeSheet();
+      openModal('New List', 'Create a fresh list? You can share the new code with your family.', () => {
+        listCode = generateListCode();
+        localStorage.setItem('pantry_list_code', listCode);
+        connectToFirebase();
+        closeModal();
+        showToast('Created ' + listCode);
+      }, false, '', 'Create', false);
+    }
+
+    addInput.addEventListener('input', () => {
+      const hasValue = addInput.value.trim().length > 0;
+      addBtn.disabled = !hasValue;
+      clearInputBtn.classList.toggle('visible', hasValue);
+    });
+
+    addInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && addItem(addInput.value)) {
+        addInput.value = '';
+        addBtn.disabled = true;
+        clearInputBtn.classList.remove('visible');
+      }
+    });
+
+    addBtn.addEventListener('click', () => {
+      if (addItem(addInput.value)) {
+        addInput.value = '';
+        addBtn.disabled = true;
+        clearInputBtn.classList.remove('visible');
+        addInput.blur();
+      }
+    });
+
+    clearInputBtn.addEventListener('click', () => {
+      addInput.value = '';
+      addBtn.disabled = true;
+      clearInputBtn.classList.remove('visible');
+      addInput.focus();
+    });
+
+    list.addEventListener('click', (e) => {
+      const item = e.target.closest('.item');
+      if (!item) return;
+      const id = item.dataset.id;
+      const action = e.target.closest('[data-action]')?.dataset.action;
+      
+      if (action === 'toggle') toggleItem(id);
+      else if (action === 'delete') {
+        const btn = e.target.closest('.delete-btn');
+        if (btn.classList.contains('confirm')) {
+          deleteItem(id);
+          clearTimeout(deleteConfirmTimeout);
+        } else {
+          document.querySelectorAll('.delete-btn.confirm').forEach(b => {
+            b.classList.remove('confirm');
+            b.innerHTML = '&#x1F5D1;&#xFE0E;';
+          });
+          btn.classList.add('confirm');
+          btn.textContent = 'Delete';
+          deleteConfirmTimeout = setTimeout(() => {
+            btn.classList.remove('confirm');
+            btn.innerHTML = '&#x1F5D1;&#xFE0E;';
+          }, 2500);
+        }
+      }
+    });
+
+    segments.addEventListener('click', (e) => {
+      const btn = e.target.closest('.segment');
+      if (btn?.dataset.filter) {
+        state.ui.filter = btn.dataset.filter;
+        saveUIState();
+        render();
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      state.ui.search = searchInput.value;
+      searchClear.classList.toggle('visible', searchInput.value.length > 0);
+      saveUIState();
+      render();
+    });
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      state.ui.search = '';
+      searchClear.classList.remove('visible');
+      saveUIState();
+      render();
+    });
+
+    menuBtn.addEventListener('click', openSheet);
+    sheetBackdrop.addEventListener('click', (e) => { if (e.target === sheetBackdrop) closeSheet(); });
+    sheetCancel.addEventListener('click', closeSheet);
+    clearCheckedBtn.addEventListener('click', clearChecked);
+    resetListBtn.addEventListener('click', () => openModal('Delete All?', 'This will permanently remove all items from the list.', resetList, false, '', 'Delete', true));
+    exportBtn.addEventListener('click', exportList);
+    importBtn.addEventListener('click', importList);
+    fileInput.addEventListener('change', handleImport);
+    copyCodeBtn.addEventListener('click', copyListCode);
+    changeListBtn.addEventListener('click', joinDifferentList);
+    newListBtn.addEventListener('click', createNewList);
+    modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) closeModal(); });
+    modalCancel.addEventListener('click', closeModal);
+    toastAction.addEventListener('click', undoDelete);
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.add-input') && !e.target.closest('.add-btn') && 
+          !e.target.closest('.search-input') && !e.target.closest('.modal-input')) {
+        addInput.blur();
+        searchInput.blur();
+      }
+    });
+
+    function getSystemTheme() { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+    function getStoredTheme() { return localStorage.getItem('pantry_theme'); }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      themeIcon.innerHTML = theme === 'dark' ? '&#x2600;&#xFE0E;' : '&#x1F319;&#xFE0E;';
+      themeColorMeta.setAttribute('content', theme === 'dark' ? '#1C1917' : '#FAF8F5');
+      localStorage.setItem('pantry_theme', theme);
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || getSystemTheme();
+      setTheme(current === 'dark' ? 'light' : 'dark');
+      haptic();
+    }
+
+    themeBtn.addEventListener('click', toggleTheme);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!getStoredTheme()) setTheme(e.matches ? 'dark' : 'light');
+    });
+
+    window.addEventListener('online', () => { isOnline = true; connectToFirebase(); });
+    window.addEventListener('offline', () => { isOnline = false; setSyncStatus('offline'); });
+
+    setTheme(getStoredTheme() || getSystemTheme());
+    loadUIState();
+    searchInput.value = state.ui.search || '';
+    searchClear.classList.toggle('visible', searchInput.value.length > 0);
+    connectToFirebase();
+
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'pantry-v3';
+        self.addEventListener('install', e => { self.skipWaiting(); });
+        self.addEventListener('activate', e => { self.clients.claim(); });
+        self.addEventListener('fetch', e => {
+          if (e.request.url.includes('firebase') || e.request.url.includes('gstatic') || e.request.url.includes('fonts')) return;
+          e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+        });
+      `;
+      navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(() => {});
+    }
+  </script>
+</body>
+</html>
