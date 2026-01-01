@@ -1729,6 +1729,26 @@
     loadUIState();
     searchInput.value = state.ui.search || '';
     searchClear.classList.toggle('visible', searchInput.value.length > 0);
+
+    // Fix iOS portrait mode overlap by dynamically calculating header height
+    function updateMainPosition() {
+      const header = document.querySelector('.header');
+      const main = document.getElementById('main');
+      if (header && main) {
+        const headerHeight = header.getBoundingClientRect().height;
+        main.style.top = `${headerHeight + 8}px`;
+      }
+    }
+
+    // Initial calculation
+    updateMainPosition();
+
+    // Recalculate on resize and orientation changes
+    window.addEventListener('resize', updateMainPosition);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(updateMainPosition, 100);
+    });
+
     initAuth();
 
     if ('serviceWorker' in navigator) {
