@@ -1097,6 +1097,7 @@
   <input type="file" id="fileInput" accept=".json" style="display: none">
 
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
   
   <script>
@@ -1112,6 +1113,7 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+    const auth = firebase.auth();
 
     const UI_STORAGE_KEY = 'pantry_ui';
     let listCode = localStorage.getItem('pantry_list_code') || generateListCode();
@@ -1123,6 +1125,7 @@
     let lastDeletedItem = null;
     let dbRef = null;
     let isOnline = navigator.onLine;
+    let currentUser = null;
 
     function generateListCode() {
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -1169,6 +1172,14 @@
 
     function connectToFirebase() {
       if (dbRef) dbRef.off();
+      if (!currentUser) {
+        setSyncStatus('offline');
+        return;
+      }
+      
+      // Register this user as a member of the list
+      db.ref('lists/' + listCode + '/members/' + currentUser.uid).set(true)
+        .catch(() => console.log('Could not register as member'));
       
       dbRef = db.ref('lists/' + listCode + '/items');
       setSyncStatus('syncing');
@@ -1182,6 +1193,29 @@
 
       document.getElementById('listCodeDisplay').textContent = listCode;
     }
+    
+    // Sign in anonymously
+    function initAuth() {
+      setSyncStatus('syncing');
+      auth.signInAnonymously()
+        .then((result) => {
+          currentUser = result.user;
+          connectToFirebase();
+        })
+        .catch((error) => {
+          console.error('Auth error:', error);
+          setSyncStatus('offline');
+          // Fallback: still try to connect (rules may allow in test mode)
+          connectToFirebase();
+        });
+    }
+    
+    // Listen for auth state changes
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        currentUser = user;
+      }
+    });
 
     function saveItemToFirebase(item) {
       setSyncStatus('syncing');
@@ -1488,7 +1522,12 @@
         if (newCode && newCode.length >= 4) {
           listCode = newCode;
           localStorage.setItem('pantry_list_code', listCode);
-          connectToFirebase();
+          // Re-init to register as member of new list
+          if (currentUser) {
+            connectToFirebase();
+          } else {
+            initAuth();
+          }
           closeModal();
           showToast('Joined ' + listCode);
         } else showToast('Invalid code');
@@ -1500,7 +1539,12 @@
       openModal('New List', 'Create a fresh list? You can share the new code with your family.', () => {
         listCode = generateListCode();
         localStorage.setItem('pantry_list_code', listCode);
-        connectToFirebase();
+        // Re-init to register as member of new list
+        if (currentUser) {
+          connectToFirebase();
+        } else {
+          initAuth();
+        }
         closeModal();
         showToast('Created ' + listCode);
       }, false, '', 'Create', false);
@@ -1631,14 +1675,14 @@
       if (!getStoredTheme()) setTheme(e.matches ? 'dark' : 'light');
     });
 
-    window.addEventListener('online', () => { isOnline = true; connectToFirebase(); });
+    window.addEventListener('online', () => { isOnline = true; if (currentUser) connectToFirebase(); else initAuth(); });
     window.addEventListener('offline', () => { isOnline = false; setSyncStatus('offline'); });
 
     setTheme(getStoredTheme() || getSystemTheme());
     loadUIState();
     searchInput.value = state.ui.search || '';
     searchClear.classList.toggle('visible', searchInput.value.length > 0);
-    connectToFirebase();
+    initAuth();
 
     if ('serviceWorker' in navigator) {
       const swCode = `

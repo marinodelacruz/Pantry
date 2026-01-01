@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "lists": {
+      "$listCode": {
+        // Members node - any authenticated user can add themselves
+        "members": {
+          "$uid": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && auth.uid == $uid"
+          }
+        },
+        // Items node - only members can read/write
+        "items": {
+          ".read": "auth != null && data.parent().child('members').child(auth.uid).exists()",
+          ".write": "auth != null && data.parent().child('members').child(auth.uid).exists()"
+        }
+      }
+    }
+  }
+}
